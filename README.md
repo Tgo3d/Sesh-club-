@@ -1,85 +1,25 @@
-# SESH CLUB — SITE EDITÁVEL
+# Sesh Club — site editável
 
-## Como visualizar
+Abra `index.html` em qualquer navegador para visualizar o site. Não é necessário instalar nada.
 
-1. Extraia esta pasta inteira.
-2. Abra `index.html` com o Chrome/Edge.
-3. Não abra o HTML de dentro do ZIP.
+## Trocas fáceis
 
-O site foi estruturado para funcionar com caminhos relativos. Isso significa que ele não depende de um caminho específico do seu computador.
+- **Produtos, preços, nomes e posição das fotos:** `assets/js/products.js`
+- **Fotos:** adicione arquivos em `assets/images/` e coloque o caminho em `products.js`
+- **Textos da página e links (WhatsApp, Instagram etc.):** `index.html`
+- **Cores, tipografia, espaçamentos e animação de fumaça:** `assets/css/style.css`
+- **Logo oficial:** substitua o arquivo `assets/images/logo-sesh-club.png`, usando o mesmo nome.
 
-## Seu caminho local atual
+## Fotos de produto
 
-Você estava usando este arquivo no seu computador:
+As quatro peças iniciais usam recortes diferentes da imagem de demonstração para deixar a home pronta para visualização. Quando houver fotos reais, troque o campo `image` de cada produto em `assets/js/products.js`; cada produto pode ter sua própria foto.
 
-`file:///C:/Users/Notxx/Documents/Codex/2026-10-05/referenced-chatgpt-conversation-this-is-an/outputs/sesh-club-site/index.html`
+As primeiras fotos reais já tratadas estão em `assets/images/products/`. Elas ainda não foram vinculadas aos cards porque os nomes comerciais e preços não foram definidos; isso evita publicar informação incorreta.
 
-Esse caminho é específico do seu PC e não deve ser colocado dentro do código. O `index.html` deste pacote pode ficar em qualquer pasta, desde que a estrutura de pastas seja mantida.
+## O que precisa de código
 
-## ALTERAR PRODUTOS — MAIS IMPORTANTE
+Criar páginas novas, checkout com pagamentos, cálculo de frete, controle de estoque e integrações de e-commerce exigem desenvolvimento adicional. O botão de carrinho desta primeira versão é demonstrativo.
 
-Abra:
+## Fumaça e acessibilidade
 
-`assets/js/products.js`
-
-É o arquivo principal para editar os produtos.
-
-Cada produto tem este formato:
-
-```js
-{
-  id: 1,
-  name: "Nome do produto",
-  price: 59.90,
-  image: "assets/images/products/foto.png",
-  position: "center",
-  tag: "Novo"
-}
-```
-
-### Para trocar somente a foto
-
-1. Coloque a nova foto dentro de:
-
-`assets/images/products/`
-
-2. No `products.js`, altere apenas:
-
-```js
-image: "assets/images/products/minha-foto.png"
-```
-
-3. Salve.
-4. Volte ao navegador e pressione `Ctrl + F5`.
-
-### Fotos atualmente vinculadas
-
-- Placas Personalizadas → `placas-personalizadas.png`
-- Banco Arte Urbana → `banco-arte-urbana.png`
-- Organizador Flow → `organizador-flow.png`
-- Banco Personalizado → `banco-personalizado-roxo.png`
-
-## Outros arquivos
-
-- `index.html` → textos, estrutura e links da página
-- `assets/css/style.css` → aparência, cores, tamanhos e animações
-- `assets/js/main.js` → comportamento do site
-- `assets/images/hero-praca.png` → imagem principal da seção Praça
-- `assets/images/hero-studio.png` → imagem da seção de estúdio
-- `assets/images/logo-sesh-club.png` → logo
-
-## Regra importante
-
-Não mova os arquivos de lugar sem atualizar os caminhos no código.
-
-Não use caminhos absolutos como:
-
-`C:/Users/Notxx/...`
-
-Use sempre caminhos relativos, como:
-
-`assets/images/products/foto.png`
-
-## Observação
-
-Esta versão é um protótipo de loja editável. O carrinho/checkout ainda é demonstrativo; pagamentos, estoque, frete e integração com marketplace podem ser adicionados posteriormente.
+A fumaça é feita em CSS; não usa vídeo, biblioteca ou arquivo pesado. Ela é desligada automaticamente para pessoas que preferem reduzir movimentos no aparelho.
