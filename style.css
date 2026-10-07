@@ -231,3 +231,13 @@ body.modal-open { overflow: hidden; }
   .cart-actions { flex-direction:column-reverse; }
   .cart-actions .button { width:100%; justify-content:center; }
 }
+
+/* Frete grátis + endereço de entrega */
+.shipping-banner{background:#171717;border-top:1px solid #2a2a2a;border-bottom:1px solid #2a2a2a}
+.shipping-banner .shell{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 18px;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+.shipping-banner strong{color:#fff}.shipping-banner span{color:#cfcfcf}.shipping-banner strong::after{content:"";display:inline-block;width:26px;height:3px;margin-left:9px;vertical-align:middle;background:linear-gradient(90deg,#2f9e44 0 33%,#f2c94c 33% 66%,#d64545 66%)}
+.address-heading{margin-top:8px;padding-top:14px;border-top:1px solid #2a2a2a;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+.address-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+.address-grid .address-wide{grid-column:span 2}
+.customer-form input[readonly]{opacity:.82}
+@media (max-width:640px){.shipping-banner .shell{flex-direction:column;gap:3px}.address-grid{grid-template-columns:1fr 1fr}.address-grid .address-wide{grid-column:1/-1}}

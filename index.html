@@ -55,6 +55,8 @@
         </div>
       </section>
 
+      <section class="shipping-banner" aria-label="Informação de frete"><div class="shell"><strong>🚚 FRETE GRÁTIS</strong><span>nas compras acima de R$ 199</span></div></section>
+
       <section class="benefits" aria-label="Benefícios da Sesh Club">
         <div class="shell benefits-grid">
           <article><span class="benefit-icon crown">♛</span><p>Produtos<br /><b>exclusivos</b></p></article>
@@ -118,11 +120,20 @@
         <div class="cart-summary"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
         <form id="customer-form" class="customer-form">
           <p class="checkout-title">Dados para entrega e pagamento</p>
-          <label>Nome<input name="name" type="text" autocomplete="name" placeholder="Seu nome" /></label>
+          <label>Nome completo*<input name="name" type="text" autocomplete="name" placeholder="Seu nome completo" required /></label>
           <label>E-mail*<input name="email" type="email" autocomplete="email" placeholder="voce@email.com" required /></label>
-          <label>WhatsApp<input name="phone" type="tel" autocomplete="tel" placeholder="(11) 99999-9999" /></label>
+          <label>WhatsApp*<input name="phone" type="tel" autocomplete="tel" placeholder="(11) 99999-9999" required /></label>
+          <div class="address-heading">Endereço de entrega</div>
           <label>CEP*<input name="cep" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000" required /></label>
-          <p class="payment-note">O frete é calculado pelo CEP. Compras a partir de R$ 199 têm frete grátis.</p>
+          <div class="address-grid">
+            <label class="address-wide">Rua / Logradouro*<input name="street" type="text" autocomplete="street-address" placeholder="Preencha o CEP" required /></label>
+            <label>Número*<input name="number" type="text" inputmode="numeric" autocomplete="address-line2" placeholder="123" required /></label>
+            <label>Complemento<input name="complement" type="text" autocomplete="address-line2" placeholder="Apto, casa, bloco..." /></label>
+            <label>Bairro*<input name="neighborhood" type="text" autocomplete="address-level3" placeholder="Preencha o CEP" required /></label>
+            <label>Cidade*<input name="city" type="text" autocomplete="address-level2" placeholder="Preencha o CEP" required readonly /></label>
+            <label>UF*<input name="uf" type="text" autocomplete="address-level1" maxlength="2" placeholder="SP" required readonly /></label>
+          </div>
+          <p class="payment-note">O frete é calculado pelo CEP. Compras a partir de R$ 199 têm frete grátis. Confira o endereço antes de ir para o pagamento.</p>
         </form>
         <p id="checkout-status" class="checkout-status" role="status"></p>
         <div class="cart-actions">

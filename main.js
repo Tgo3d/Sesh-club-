@@ -23,7 +23,7 @@ const SHIPPING_BY_UF = {
 };
 
 let cart = [];
-let shipping = { cep: "", uf: "", value: null, city: "", loading: false };
+let shipping = { cep: "", uf: "", value: null, city: "", street: "", neighborhood: "", loading: false };
 
 function showToast(message) {
   toast.textContent = message;
@@ -109,11 +109,9 @@ function renderCart() {
   }
 
   const requiresShipping = cart.length > 0 && sub < FREE_SHIPPING_THRESHOLD;
-  const email = customerForm?.elements?.email?.value?.trim() || "";
-  checkoutButton.disabled = !cart.length || !email || (requiresShipping && (!hasCep || shipping.value == null || shipping.loading));
-  if (sub >= FREE_SHIPPING_THRESHOLD && cart.length) {
-    checkoutButton.disabled = !cart.length || !email;
-  }
+  const requiredNow = ["name","email","phone","cep","street","number","neighborhood","city","uf"];
+  const addressComplete = requiredNow.every((field) => String(customerForm?.elements?.[field]?.value || "").trim());
+  checkoutButton.disabled = !cart.length || !addressComplete || shipping.loading || !hasCep || !shipping.uf || !shipping.city || !shipping.street || !shipping.neighborhood || (requiresShipping && shipping.value == null);
 }
 
 function openCart() {
@@ -132,12 +130,16 @@ function closeCart() {
 async function lookupCep(cep) {
   const clean = cep.replace(/\D/g, "");
   if (clean.length !== 8) {
-    shipping = { ...shipping, cep, uf: "", value: null, city: "" };
+    shipping = { ...shipping, cep, uf: "", value: null, city: "", street: "", neighborhood: "", loading: false };
+    customerForm.elements.city.value = "";
+    customerForm.elements.uf.value = "";
+    customerForm.elements.street.value = "";
+    customerForm.elements.neighborhood.value = "";
     renderCart();
     return;
   }
 
-  shipping = { ...shipping, cep, loading: true, value: null, uf: "", city: "" };
+  shipping = { ...shipping, cep, loading: true, value: null, uf: "", city: "", street: "", neighborhood: "" };
   renderCart();
   checkoutStatus.textContent = "Consultando CEP…";
 
@@ -146,10 +148,26 @@ async function lookupCep(cep) {
     const data = await response.json();
     if (!response.ok || data.erro || !data.uf) throw new Error("CEP não encontrado");
     const value = SHIPPING_BY_UF[data.uf];
-    shipping = { cep: clean.replace(/^(\d{5})(\d{3})$/, "$1-$2"), uf: data.uf, value: value ?? null, city: data.localidade || "", loading: false };
+    shipping = {
+      cep: clean.replace(/^(\d{5})(\d{3})$/, "$1-$2"),
+      uf: data.uf,
+      value: value ?? null,
+      city: data.localidade || "",
+      street: data.logradouro || "",
+      neighborhood: data.bairro || "",
+      loading: false
+    };
+    customerForm.elements.city.value = data.localidade || "";
+    customerForm.elements.uf.value = data.uf || "";
+    customerForm.elements.street.value = data.logradouro || "";
+    customerForm.elements.neighborhood.value = data.bairro || "";
     checkoutStatus.textContent = value == null ? "Ainda não há tarifa configurada para este estado." : `Entrega para ${data.localidade}/${data.uf}.`;
   } catch (error) {
-    shipping = { cep, uf: "", value: null, city: "", loading: false };
+    shipping = { ...shipping, cep, uf: "", value: null, city: "", street: "", neighborhood: "", loading: false };
+    customerForm.elements.city.value = "";
+    customerForm.elements.uf.value = "";
+    customerForm.elements.street.value = "";
+    customerForm.elements.neighborhood.value = "";
     checkoutStatus.textContent = "Não foi possível localizar esse CEP. Confira os números e tente novamente.";
   }
   renderCart();
@@ -167,7 +185,20 @@ async function startCheckout() {
 
   const freight = shippingValue();
   const sub = subtotal();
-  if (sub < FREE_SHIPPING_THRESHOLD && (freight == null || shipping.loading)) {
+  const requiredAddress = [
+    "name", "email", "phone", "cep", "street", "number", "neighborhood", "city", "uf"
+  ];
+  const missing = requiredAddress.find((field) => !String(formData.get(field) || "").trim());
+  if (missing) {
+    checkoutStatus.textContent = "Preencha todos os dados obrigatórios do endereço e contato.";
+    customerForm.elements[missing]?.focus();
+    return;
+  }
+  if (shipping.loading || !shipping.uf || !shipping.city || !shipping.street || !shipping.neighborhood) {
+    checkoutStatus.textContent = "Informe um CEP válido e aguarde o preenchimento do endereço.";
+    return;
+  }
+  if (sub < FREE_SHIPPING_THRESHOLD && freight == null) {
     checkoutStatus.textContent = "Informe um CEP válido para calcular o frete.";
     return;
   }
@@ -192,7 +223,11 @@ async function startCheckout() {
           cost: freight || 0,
           cep: shipping.cep,
           uf: shipping.uf,
-          city: shipping.city
+          city: shipping.city,
+          street: String(formData.get("street") || "").trim(),
+          number: String(formData.get("number") || "").trim(),
+          complement: String(formData.get("complement") || "").trim(),
+          neighborhood: String(formData.get("neighborhood") || "").trim()
         },
         customer: {
           name: String(formData.get("name") || "").trim(),
