@@ -187,3 +187,47 @@ h1 em, h2 em { font-family: "Permanent Marker", cursive; font-style: normal; col
 
 @media (max-width: 370px) { .product-grid { grid-template-columns: 1fr; }.benefits-grid { grid-template-columns: 1fr; }.benefits article:last-child { grid-column: auto; }.benefits article { border-right: 0; }.section-heading { gap: .6rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+
+/* Sesh Club — carrinho e checkout */
+body.modal-open { overflow: hidden; }
+.cart-modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: end; padding: 1rem; background: rgba(0,0,0,.72); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility .2s ease; }
+.cart-modal.open { opacity: 1; visibility: visible; pointer-events: auto; }
+.cart-panel { width: min(620px, 100%); max-height: min(92vh, 900px); overflow: auto; background: #111; color: var(--paper, #f5f2e9); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 1.25rem; box-shadow: 0 30px 80px rgba(0,0,0,.65); transform: translateY(30px); transition: transform .25s ease; }
+.cart-modal.open .cart-panel { transform: translateY(0); }
+.cart-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+.cart-header h2 { margin:0; font-size:2rem; }
+.modal-close { border:0; background:transparent; color:inherit; font-size:2rem; cursor:pointer; line-height:1; }
+.cart-list { display:grid; gap:.75rem; }
+.cart-empty { padding:2rem 1rem; text-align:center; border:1px dashed rgba(255,255,255,.18); border-radius:12px; display:grid; gap:.35rem; }
+.cart-empty span { opacity:.7; }
+.cart-item { display:grid; grid-template-columns:72px 1fr auto; gap:.8rem; align-items:center; padding:.75rem; border:1px solid rgba(255,255,255,.1); border-radius:12px; background:#171817; }
+.cart-item-thumb { width:72px; height:72px; border-radius:10px; background:#090909 center/cover no-repeat; }
+.cart-item-info { min-width:0; display:grid; gap:.2rem; }
+.cart-item-info > span { opacity:.7; font-size:.9rem; }
+.cart-item-controls { display:flex; align-items:center; gap:.45rem; margin-top:.35rem; }
+.cart-item-controls button { border:1px solid rgba(255,255,255,.18); background:#0d0d0d; color:inherit; min-width:30px; height:30px; border-radius:7px; cursor:pointer; }
+.cart-item-controls .cart-remove { border:0; background:transparent; color:#ff6b6b; min-width:auto; margin-left:.3rem; }
+.cart-item-total { white-space:nowrap; }
+.cart-summary { margin:1rem 0; padding:1rem 0; border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12); display:grid; gap:.45rem; }
+.summary-row { display:flex; justify-content:space-between; gap:1rem; font-size:.95rem; }
+.summary-row span { opacity:.72; }
+.summary-total { padding-top:.45rem; margin-top:.2rem; border-top:1px solid rgba(255,255,255,.08); font-size:1.15rem; }
+.summary-total span { opacity:1; font-weight:700; }
+.customer-form { display:grid; gap:.75rem; }
+.customer-form label { display:grid; gap:.35rem; font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+.customer-form input { width:100%; box-sizing:border-box; padding:.78rem .85rem; border:1px solid rgba(255,255,255,.15); border-radius:9px; background:#0b0b0b; color:#fff; font:inherit; text-transform:none; letter-spacing:0; }
+.customer-form input:focus { outline:2px solid rgba(255,202,27,.65); outline-offset:1px; }
+.checkout-title { margin:.25rem 0 0; font-weight:800; }
+.payment-note { margin:0; opacity:.7; font-size:.82rem; line-height:1.45; }
+.checkout-status { min-height:1.25rem; margin:.75rem 0 0; font-size:.85rem; opacity:.85; }
+.cart-actions { display:flex; justify-content:flex-end; gap:.7rem; margin-top:1rem; }
+.cart-actions .button:disabled { opacity:.45; cursor:not-allowed; }
+@media (max-width: 560px) {
+  .cart-modal { padding:.5rem; }
+  .cart-panel { padding:1rem; border-radius:14px; }
+  .cart-item { grid-template-columns:56px 1fr; }
+  .cart-item-thumb { width:56px; height:56px; }
+  .cart-item-total { grid-column:2; justify-self:start; }
+  .cart-actions { flex-direction:column-reverse; }
+  .cart-actions .button { width:100%; justify-content:center; }
+}
