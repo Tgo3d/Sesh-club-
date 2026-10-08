@@ -65,7 +65,7 @@ if (!product) {
         <div class="product-gallery-main" id="product-gallery-main"></div>
         <div class="product-gallery-thumbs" role="list">
           ${gallery.map((src, index) => {
-            const isVideo = /\\.(mp4|webm|ogg)(\\?|$)/i.test(src);
+            const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(src);
             return `<button class="gallery-thumb ${index === 0 ? "active" : ""}" type="button" data-gallery-index="${index}" aria-label="${isVideo ? `Ver vídeo ${index + 1}` : `Ver foto ${index + 1}`}">
               ${isVideo
                 ? `<span class="gallery-video-thumb"><video src="${src}" muted playsinline preload="metadata" aria-hidden="true"></video><span class="gallery-video-label">▶ VÍDEO</span></span>`
@@ -127,9 +127,12 @@ if (!product) {
   function renderMainMedia(index) {
     const src = gallery[index];
     const container = document.querySelector("#product-gallery-main");
-    const isVideo = /\\.(mp4|webm|ogg)(\\?|$)/i.test(src);
+    const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(src);
     if (isVideo) {
-      container.innerHTML = `<video id="product-main-video" src="${src}" controls playsinline preload="metadata" aria-label="${escapeHtml(product.name)} — vídeo"></video>`;
+      container.innerHTML = `<video id="product-main-video" controls playsinline preload="metadata" aria-label="${escapeHtml(product.name)} — vídeo">
+        <source src="${src}" type="video/mp4">
+        Seu navegador não conseguiu reproduzir este vídeo.
+      </video>`;
     } else {
       container.innerHTML = `<img id="product-main-image" src="${src}" alt="${escapeHtml(product.name)} — foto ${index + 1}" decoding="async" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} />`;
     }
