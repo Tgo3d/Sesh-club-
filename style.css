@@ -126,12 +126,12 @@ h1 em, h2 em { font-family: "Permanent Marker", cursive; font-style: normal; col
 .product-info h3 { margin: 0 0 .75rem; font-size: .88rem; font-weight: 500; }
 .product-info div { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
 .product-info strong { font-size: .85rem; }
-.add-button { width: 34px; height: 34px; border-radius: .2rem; border: 1px solid var(--yellow); background: transparent; color: var(--yellow); cursor: pointer; font-size: 1.15rem; line-height: 1; transition: color .2s, background .2s; }
+.add-button { min-width: 78px; height: 34px; padding: 0 .65rem; border-radius: .2rem; border: 1px solid var(--yellow); background: transparent; color: var(--yellow); cursor: pointer; font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; line-height: 1; transition: color .2s, background .2s; }
 .add-button:hover { background: var(--yellow); color: #0a0a09; }
 
 /* Manifesto */
 .story { position: relative; isolation: isolate; overflow: hidden; min-height: 405px; display: flex; align-items: center; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.story-image { position: absolute; z-index: -3; inset: 0; background: linear-gradient(90deg, rgba(5,7,5,.88), rgba(5,7,5,.42)), url("hero-studio.png") 86% 57% / cover; filter: saturate(.84); }
+.story-image { position: absolute; z-index: -3; inset: 0; background: linear-gradient(90deg, rgba(5,7,5,.88), rgba(5,7,5,.42)), url("hero-studio.webp") 86% 57% / cover; filter: saturate(.84); }
 .story-image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.45), transparent 70%), linear-gradient(0deg, rgba(0,0,0,.55), transparent 50%); }
 .story-smoke { position: absolute; z-index: -2; left: 35%; top: 10%; width: 50vw; height: 100%; opacity: .18; filter: blur(14px); background: repeating-radial-gradient(ellipse at 40% 70%, transparent 0 19px, #e9e7df 20px 24px, transparent 28px 70px); transform: rotate(-14deg); }
 .story-inner { display: grid; grid-template-columns: 1.2fr .8fr; align-items: center; gap: 6rem; padding: 5rem 0; }
@@ -241,3 +241,53 @@ body.modal-open { overflow: hidden; }
 .address-grid .address-wide{grid-column:span 2}
 .customer-form input[readonly]{opacity:.82}
 @media (max-width:640px){.shipping-banner .shell{flex-direction:column;gap:3px}.address-grid{grid-template-columns:1fr 1fr}.address-grid .address-wide{grid-column:1/-1}}
+
+
+/* Catálogo e páginas de produto */
+.product-card-link { display: block; color: inherit; text-decoration: none; }
+.product-photo { position: relative; height: 250px; background: #0a0c0a; overflow: hidden; }
+.product-photo img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; transition: transform .35s ease; }
+.product-card:hover .product-photo img { transform: scale(1.035); }
+.product-info p { margin: -.35rem 0 .8rem; color: var(--muted); font-size: .75rem; line-height: 1.45; min-height: 2.15em; }
+.product-info > strong { display: block; font-size: .95rem; }
+.product-actions { display:flex; align-items:center; justify-content:space-between; gap:.6rem; padding:0 .9rem .9rem; }
+.product-details-link { color:#fff; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; text-decoration:underline; text-underline-offset:4px; }
+.product-detail { padding: 7rem 0 5rem; }
+.product-detail-grid { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr); gap:3rem; align-items:start; }
+.product-detail-media { background:#0a0c0a; border:1px solid rgba(245,241,232,.16); border-radius:.4rem; overflow:hidden; position:sticky; top:6rem; }
+.product-detail-media img { width:100%; display:block; aspect-ratio:1/1; object-fit:contain; background:#090b09; }
+.product-detail-copy .kicker { margin-bottom:.8rem; }
+.product-detail-copy h1 { margin:0 0 .7rem; font-family:"Barlow Condensed",sans-serif; text-transform:uppercase; font-size:clamp(3rem,7vw,5.4rem); line-height:.88; letter-spacing:-.04em; }
+.product-detail-copy .price { font-size:1.35rem; font-weight:800; margin:1.2rem 0; }
+.product-detail-copy .description { color:var(--muted); line-height:1.7; max-width:58ch; }
+.product-detail-list { list-style:none; padding:0; margin:1.6rem 0 2rem; border-top:1px solid rgba(245,241,232,.12); }
+.product-detail-list li { padding:.8rem 0; border-bottom:1px solid rgba(245,241,232,.12); color:#ddd8cf; }
+.product-detail-actions { display:flex; gap:.7rem; flex-wrap:wrap; }
+.product-detail-note { margin-top:1rem; color:#8f8d87; font-size:.75rem; line-height:1.5; }
+@media(max-width:850px){ .product-detail-grid{grid-template-columns:1fr;gap:1.5rem}.product-detail-media{position:static}.product-detail{padding:5rem 0 3.5rem} }
+
+
+/* Galeria e variações — Banco Porta Seda / páginas de produto */
+.product-detail-grid-rich { align-items: start; }
+.product-gallery { min-width: 0; }
+.product-gallery-main { background: #111; border: 1px solid rgba(255,255,255,.12); border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 4; display: grid; place-items: center; }
+.product-gallery-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-gallery-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+.gallery-thumb { padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: #111; cursor: pointer; aspect-ratio: 1 / 1; }
+.gallery-thumb.active { border-color: #d6b500; }
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-detail-lead { font-size: 1.08rem; font-weight: 600; opacity: .9; }
+.product-options { margin: 22px 0; display: grid; gap: 18px; }
+.option-group { display: grid; gap: 9px; }
+.option-label { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: .82rem; }
+.option-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.option-button { border: 1px solid rgba(255,255,255,.22); background: #151515; color: inherit; border-radius: 999px; padding: 10px 14px; font: inherit; font-weight: 700; cursor: pointer; }
+.option-button:hover, .option-button.selected { border-color: #d6b500; box-shadow: inset 0 0 0 1px #d6b500; }
+.product-detail-list-wrap h2 { font-size: 1.1rem; margin: 20px 0 10px; }
+.product-story { margin-top: 55px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,.12); }
+.product-story h2 { max-width: 760px; }
+.product-story p { max-width: 850px; line-height: 1.7; opacity: .88; }
+@media (max-width: 800px) {
+  .product-gallery-thumbs { grid-template-columns: repeat(5, 1fr); }
+  .product-gallery-main { aspect-ratio: 4 / 5; }
+}

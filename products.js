@@ -1,13 +1,146 @@
 /*
-  EDITE A LOJA AQUI.
-  Para trocar uma foto, coloque a nova imagem em assets/images/ e altere o campo "image".
-  Preços são números: o site adiciona R$ automaticamente.
+  CATÁLOGO OFICIAL — SESH CLUB
+  
+  EDITAR PRODUTOS:
+  1. Título/preço -> name / price
+  2. Foto principal -> image
+  3. Outras fotos -> gallery
+  4. Texto -> short / description
+  5. Características -> details
+  6. Medidas -> specs
+  7. Opções -> variants
+
+  IMPORTANTE: não é necessário editar index.html ou product.html para
+  cadastrar/alterar um produto. As páginas são montadas automaticamente.
 */
 const SESh_PRODUCTS = [
-  { id: 1, name: "Placas Personalizadas", price: 59.9, image: "placas-personalizadas.png", position: "center", tag: "Personalizado" },
-  { id: 2, name: "Banco Arte Urbana", price: 69.9, image: "banco-arte-urbana.png", position: "center", tag: "Destaque" },
-  { id: 3, name: "Organizador Flow", price: 49.9, image: "organizador-flow.png", position: "center", tag: "Novo" },
-  { id: 4, name: "Banco Personalizado", price: 79.9, image: "banco-personalizado-roxo.png", position: "center", tag: "Personalizável" }
+  {
+    id: 5,
+    slug: "banco-porta-seda",
+    name: "Praça Sesh Club",
+    price: 59.90,
+    image: "foto-02.webp",
+    gallery: ["foto-02.webp", "foto-03.webp", "foto-04.webp", "foto-05.webp", "capa.webp", "foto-06.webp"],
+    position: "center",
+    tag: "Destaque Sesh Club",
+    short: "Uma peça para fazer parte da sua Sesh.",
+    description: "O Banco Porta Seda foi criado para incorporar a sessão de relaxamento à decoração. Reúne banco porta-seda, encosto para plaquinhas, poste removível com compartimento na luminária e lixeira basculante em uma única peça. A versão com suporte acrescenta um espaço dedicado para o isqueiro sem alterar o restante do produto.",
+    details: [
+      "Banco porta-seda com 110 mm de largura",
+      "Praça/base com 180 mm x 73 mm",
+      "Poste removível da base e utilizável como pilão",
+      "Compartimento tipo mocó na parte da luminária",
+      "Lixeira basculante que pode ser usada como porta-piteira ou cinzeiro",
+      "As plaquinhas do encosto podem ser personalizadas na opção de produtos personalizados",
+      "Envio imediato após comprovação do pagamento"
+    ],
+    specs: [
+      { label: "Largura do banco", value: "110 mm" },
+      { label: "Dimensão da praça/base", value: "180 x 73 mm" },
+      { label: "Cores da lixeira", value: "Preta, azul ou branca" },
+      { label: "Envio", value: "Imediato após comprovação do pagamento" }
+    ],
+    variants: [
+      {
+        id: "lixeira",
+        label: "Cor da lixeira",
+        options: [
+          { id: "preta", label: "Preta", priceDelta: 0 },
+          { id: "azul", label: "Azul", priceDelta: 0 },
+          { id: "branca", label: "Branca", priceDelta: 0 }
+        ]
+      },
+      {
+        id: "suporte",
+        label: "Suporte de isqueiro",
+        options: [
+          { id: "sem-suporte", label: "Sem suporte", priceDelta: 0 },
+          { id: "com-suporte", label: "Com suporte", priceDelta: 5.00 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 1,
+    slug: "placas-personalizadas",
+    name: "Placas Personalizadas",
+    price: 59.90,
+    image: "placas-personalizadas.webp",
+    gallery: ["placas-personalizadas.webp"],
+    position: "center",
+    tag: "Personalizado",
+    short: "Uma peça com a sua identidade.",
+    description: "Placas personalizadas para levar a identidade da Sesh Club para o seu espaço. O foco é criar uma peça com nome, frase ou identidade visual que tenha a sua cara.",
+    details: [
+      "Produção em impressão 3D",
+      "Personalização sob consulta",
+      "Cores e acabamento conforme disponibilidade"
+    ],
+    specs: [],
+    variants: []
+  },
+
+  {
+    id: 2,
+    slug: "banco-arte-urbana",
+    name: "Banco Arte Urbana",
+    price: 69.90,
+    image: "banco-arte-urbana.webp",
+    gallery: ["banco-arte-urbana.webp"],
+    position: "center",
+    tag: "Destaque",
+    short: "Arte urbana para o seu ambiente.",
+    description: "Uma peça com presença visual e linguagem urbana, pensada para compor ambientes com a estética da Sesh Club.",
+    details: [
+      "Produção em impressão 3D",
+      "Design inspirado na estética urbana",
+      "Peça produzida sob demanda"
+    ],
+    specs: [],
+    variants: []
+  },
+
+  {
+    id: 3,
+    slug: "organizador-flow",
+    name: "Organizador Flow",
+    price: 49.90,
+    image: "organizador-flow.webp",
+    gallery: ["organizador-flow.webp"],
+    position: "center",
+    tag: "Novo",
+    short: "Organização com personalidade.",
+    description: "Um organizador compacto para manter seus pequenos itens no lugar sem abrir mão da estética Sesh Club.",
+    details: [
+      "Produção em impressão 3D",
+      "Design compacto",
+      "Peça produzida sob demanda"
+    ],
+    specs: [],
+    variants: []
+  },
+
+  {
+    id: 4,
+    slug: "banco-personalizado",
+    name: "Banco Personalizado",
+    price: 79.90,
+    image: "banco-personalizado-roxo.webp",
+    gallery: ["banco-personalizado-roxo.webp"],
+    position: "center",
+    tag: "Personalizável",
+    short: "Uma peça feita para ser sua.",
+    description: "Banco personalizado com identidade própria para quem quer uma peça diferente no ambiente. Consulte as opções de personalização disponíveis.",
+    details: [
+      "Produção em impressão 3D",
+      "Personalização sob consulta",
+      "Cores e acabamento conforme disponibilidade"
+    ],
+    specs: [],
+    variants: []
+  },
+
+
 ];
 
 const SESh_CATEGORIES = [

@@ -22,7 +22,18 @@ const SHIPPING_BY_UF = {
   AM: 39.90, PA: 39.90, AC: 39.90, AP: 39.90, RO: 39.90, RR: 39.90, TO: 39.90
 };
 
+const CART_STORAGE_KEY = "sesh-club-cart-v1";
 let cart = [];
+try {
+  const savedCart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "[]");
+  cart = Array.isArray(savedCart) ? savedCart : [];
+} catch {
+  cart = [];
+}
+
+function saveCart() {
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+}
 let shipping = { cep: "", uf: "", value: null, city: "", street: "", neighborhood: "", loading: false };
 
 function showToast(message) {
@@ -35,12 +46,20 @@ function showToast(message) {
 function renderProducts() {
   productGrid.innerHTML = SESh_PRODUCTS.map((product) => `
     <article class="product-card">
-      <div class="product-photo" style="background-image: url('${product.image}'); background-position: ${product.position};">
-        <span>${product.tag}</span>
-      </div>
-      <div class="product-info">
-        <h3>${product.name}</h3>
-        <div><strong>${formatPrice(product.price)}</strong><button class="add-button" data-product="${product.id}" aria-label="Adicionar ${product.name} ao carrinho">＋</button></div>
+      <a class="product-card-link" href="product.html?id=${product.id}" aria-label="Ver detalhes de ${product.name}">
+        <div class="product-photo">
+          <img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async" />
+          <span>${product.tag}</span>
+        </div>
+        <div class="product-info">
+          <h3>${product.name}</h3>
+          <p>${product.short}</p>
+          <strong>${product.variants ? `A partir de ${formatPrice(product.price)}` : formatPrice(product.price)}</strong>
+        </div>
+      </a>
+      <div class="product-actions">
+        <a class="product-details-link" href="product.html?id=${product.id}">Ver detalhes</a>
+        <button class="add-button" data-product="${product.id}" aria-label="${product.variants ? `Escolher opções de ${product.name}` : `Adicionar ${product.name} ao carrinho`}">COMPRAR</button>
       </div>
     </article>`).join("");
 }
@@ -78,12 +97,12 @@ function renderCart() {
         <div class="cart-item-thumb" style="background-image:url('${item.image}')"></div>
         <div class="cart-item-info">
           <strong>${item.name}</strong>
-          <span>${formatPrice(item.price)}</span>
+          <span>${formatPrice(item.price)}${item.variant_label ? ` · ${item.variant_label}` : ""}</span>
           <div class="cart-item-controls">
-            <button type="button" data-action="decrease" data-id="${item.id}" aria-label="Diminuir quantidade">−</button>
+            <button type="button" data-action="decrease" data-key="${item.cartKey || item.id}" aria-label="Diminuir quantidade">−</button>
             <b>${item.quantity}</b>
-            <button type="button" data-action="increase" data-id="${item.id}" aria-label="Aumentar quantidade">+</button>
-            <button class="cart-remove" type="button" data-action="remove" data-id="${item.id}">Remover</button>
+            <button type="button" data-action="increase" data-key="${item.cartKey || item.id}" aria-label="Aumentar quantidade">+</button>
+            <button class="cart-remove" type="button" data-action="remove" data-key="${item.cartKey || item.id}">Remover</button>
           </div>
         </div>
         <strong class="cart-item-total">${formatPrice(item.price * item.quantity)}</strong>
@@ -213,9 +232,9 @@ async function startCheckout() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         items: cart.map((item) => ({
-          id: String(item.id),
-          title: item.name,
-          description: `Produto Sesh Club — ${item.name}`,
+          id: String(item.base_product_id || item.id),
+          title: item.variant_label ? `${item.name} — ${item.variant_label}` : item.name,
+          description: `Produto Sesh Club — ${item.name}${item.variant_label ? ` | ${item.variant_label}` : ""}`,
           quantity: item.quantity,
           unit_price: item.price
         })),
@@ -250,16 +269,26 @@ async function startCheckout() {
 
 renderProducts();
 renderCategories();
+updateCartCount();
 renderCart();
+
+if (new URLSearchParams(window.location.search).get("cart") === "1" && cart.length) {
+  openCart();
+}
 
 productGrid.addEventListener("click", (event) => {
   const button = event.target.closest(".add-button");
   if (!button) return;
   const product = SESh_PRODUCTS.find((item) => item.id === Number(button.dataset.product));
   if (!product) return;
-  const existing = cart.find((item) => item.id === product.id);
+  if (product.variants) {
+    window.location.href = `product.html?id=${product.id}`;
+    return;
+  }
+  const existing = cart.find((item) => item.id === product.id && !item.cartKey);
   if (existing) existing.quantity += 1;
   else cart.push({ ...product, quantity: 1 });
+  saveCart();
   updateCartCount();
   renderCart();
   showToast(`${product.name} foi adicionado ao carrinho.`);
@@ -268,12 +297,13 @@ productGrid.addEventListener("click", (event) => {
 cartList.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-action]");
   if (!button) return;
-  const id = Number(button.dataset.id);
-  const item = cart.find((entry) => entry.id === id);
+  const key = button.dataset.key;
+  const item = cart.find((entry) => String(entry.cartKey || entry.id) === String(key));
   if (!item) return;
   if (button.dataset.action === "increase") item.quantity += 1;
   if (button.dataset.action === "decrease") item.quantity -= 1;
-  if (button.dataset.action === "remove" || item.quantity <= 0) cart = cart.filter((entry) => entry.id !== id);
+  if (button.dataset.action === "remove" || item.quantity <= 0) cart = cart.filter((entry) => String(entry.cartKey || entry.id) !== String(key));
+  saveCart();
   updateCartCount();
   renderCart();
 });
