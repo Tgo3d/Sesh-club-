@@ -68,7 +68,7 @@ if (!product) {
             const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(src);
             return `<button class="gallery-thumb ${index === 0 ? "active" : ""}" type="button" data-gallery-index="${index}" aria-label="${isVideo ? `Ver vídeo ${index + 1}` : `Ver foto ${index + 1}`}">
               ${isVideo
-                ? `<span class="gallery-video-thumb"><video src="${src}" muted playsinline preload="metadata" aria-hidden="true"></video><span class="gallery-video-label">▶ VÍDEO</span></span>`
+                ? `<span class="gallery-video-thumb"><img src="${gallery[0]}" alt="" loading="lazy" decoding="async" /><span class="gallery-video-label">▶ VÍDEO</span></span>`
                 : `<img src="${src}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async" />`}
             </button>`;
           }).join("")}
