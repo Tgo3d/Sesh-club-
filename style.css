@@ -339,3 +339,38 @@ body.modal-open { overflow: hidden; }
   border-radius: 12px;
   background: #000;
 }
+
+.product-gallery-thumb-video {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+.product-gallery-thumb-video img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.video-thumb-play {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.78);
+  color: #fff;
+  font-size: 15px;
+  pointer-events: none;
+}
+.video-thumb-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  color: #fff;
+}
