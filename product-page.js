@@ -1,3 +1,15 @@
+
+function renderGalleryMedia(src, alt = "") {
+  const lower = String(src || "").toLowerCase();
+  if (lower.endsWith(".mp4") || lower.endsWith(".webm") || lower.endsWith(".mov")) {
+    return `<video class="product-gallery-video" controls playsinline preload="metadata">
+      <source src="${src}" type="${lower.endsWith(".mp4") ? "video/mp4" : lower.endsWith(".webm") ? "video/webm" : "video/quicktime"}">
+      Seu navegador não conseguiu reproduzir este vídeo.
+    </video>`;
+  }
+  return `<img src="${src}" alt="${alt}" loading="lazy">`;
+}
+
 const root = document.querySelector("#produto");
 const id = Number(new URLSearchParams(window.location.search).get("id"));
 const product = SESh_PRODUCTS.find((item) => item.id === id);
@@ -50,11 +62,16 @@ if (!product) {
   root.innerHTML = `
     <div class="product-detail-grid product-detail-grid-rich">
       <section class="product-gallery" aria-label="Fotos do ${escapeHtml(product.name)}">
-        <div class="product-gallery-main">
-          <img id="product-main-image" src="${gallery[0]}" alt="${escapeHtml(product.name)}" decoding="async" fetchpriority="high" />
-        </div>
+        <div class="product-gallery-main" id="product-gallery-main"></div>
         <div class="product-gallery-thumbs" role="list">
-          ${gallery.map((src, index) => `<button class="gallery-thumb ${index === 0 ? "active" : ""}" type="button" data-gallery-index="${index}" aria-label="Ver foto ${index + 1}"><img src="${src}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async" /></button>`).join("")}
+          ${gallery.map((src, index) => {
+            const isVideo = /\\.(mp4|webm|ogg)(\\?|$)/i.test(src);
+            return `<button class="gallery-thumb ${index === 0 ? "active" : ""}" type="button" data-gallery-index="${index}" aria-label="${isVideo ? `Ver vídeo ${index + 1}` : `Ver foto ${index + 1}`}">
+              ${isVideo
+                ? `<span class="gallery-video-thumb"><video src="${src}" muted playsinline preload="metadata" aria-hidden="true"></video><span class="gallery-video-label">▶ VÍDEO</span></span>`
+                : `<img src="${src}" alt="" loading="${index === 0 ? "eager" : "lazy"}" decoding="async" />`}
+            </button>`;
+          }).join("")}
         </div>
       </section>
 
@@ -107,12 +124,23 @@ if (!product) {
       ${product.id === 5 ? `<p>As plaquinhas do encosto podem ser personalizadas na opção de produtos personalizados.</p>` : ""}
     </section>`;
 
+  function renderMainMedia(index) {
+    const src = gallery[index];
+    const container = document.querySelector("#product-gallery-main");
+    const isVideo = /\\.(mp4|webm|ogg)(\\?|$)/i.test(src);
+    if (isVideo) {
+      container.innerHTML = `<video id="product-main-video" src="${src}" controls playsinline preload="metadata" aria-label="${escapeHtml(product.name)} — vídeo"></video>`;
+    } else {
+      container.innerHTML = `<img id="product-main-image" src="${src}" alt="${escapeHtml(product.name)} — foto ${index + 1}" decoding="async" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} />`;
+    }
+  }
+
+  renderMainMedia(0);
+
   document.querySelectorAll(".gallery-thumb").forEach((button) => {
     button.addEventListener("click", () => {
       const index = Number(button.dataset.galleryIndex);
-      const main = document.querySelector("#product-main-image");
-      main.src = gallery[index];
-      main.alt = `${product.name} — foto ${index + 1}`;
+      renderMainMedia(index);
       document.querySelectorAll(".gallery-thumb").forEach((item) => item.classList.remove("active"));
       button.classList.add("active");
     });

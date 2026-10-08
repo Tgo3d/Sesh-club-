@@ -72,3 +72,11 @@ A página do produto e o carrinho montam essas opções automaticamente.
 ## Importante
 
 Não altere `main.js`, `product-page.js`, `index.html` ou `product.html` para fazer mudanças comuns de catálogo. Esses arquivos são a estrutura do site.
+
+
+### Produto adicionado
+- **Luminária Folha** — R$ 119,90
+- Imagem principal: `luminaria-folha-01.webp`
+- Galeria: `luminaria-folha-01.webp`, `luminaria-folha-02.webp`, `luminaria-folha-03.webp`
+
+- Vídeo da Luminária Folha: `luminaria-folha-video.mp4` (último item da galeria).
