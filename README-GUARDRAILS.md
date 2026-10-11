@@ -24,3 +24,9 @@ Os identificadores e valores do catálogo conferem com `products.js`:
 
 ## Cloudflare
 O Worker não é atualizado pelo ZIP do site. Quando chegar a hora, o código será revisado e publicado separadamente no Worker `sesh-club-pagamentos`, mantendo o Secret `MP_ACCESS_TOKEN` e o binding D1 `DB`. Nunca coloque o token no site nem o compartilhe no chat.
+
+
+## V19 — idempotência no navegador
+- O `main.js` cria uma chave idempotente por conjunto de dados de checkout e a reutiliza em tentativas com os mesmos dados.
+- Esta alteração é compatível com o Worker anterior, mas o Worker candidato V1 exige a versão atualizada do `main.js`.
+- O Worker candidato é entregue separadamente e não está publicado.
