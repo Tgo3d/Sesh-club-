@@ -54,12 +54,12 @@ function renderProducts() {
         <div class="product-info">
           <h3>${product.name}</h3>
           <p>${product.short}</p>
-          <strong>${product.variants ? `A partir de ${formatPrice(product.price)}` : formatPrice(product.price)}</strong>
+          ${product.status === "em-breve" ? `<strong class="coming-soon-price">EM BREVE</strong>` : `<strong>${product.variants ? `A partir de ${formatPrice(product.price)}` : formatPrice(product.price)}</strong>`}
         </div>
       </a>
       <div class="product-actions">
         <a class="product-details-link" href="product.html?id=${product.id}">Ver detalhes</a>
-        <button class="add-button" data-product="${product.id}" aria-label="${product.variants ? `Escolher opções de ${product.name}` : `Adicionar ${product.name} ao carrinho`}">COMPRAR</button>
+        ${product.status === "em-breve" ? `<span class="coming-soon-action">EM BREVE</span>` : `<button class="add-button" data-product="${product.id}" aria-label="${product.variants ? `Escolher opções de ${product.name}` : `Adicionar ${product.name} ao carrinho`}">COMPRAR</button>`}
       </div>
     </article>`).join("");
 }
@@ -233,13 +233,10 @@ async function startCheckout() {
       body: JSON.stringify({
         items: cart.map((item) => ({
           id: String(item.base_product_id || item.id),
-          title: item.variant_label ? `${item.name} — ${item.variant_label}` : item.name,
-          description: `Produto Sesh Club — ${item.name}${item.variant_label ? ` | ${item.variant_label}` : ""}`,
-          quantity: item.quantity,
-          unit_price: item.price
+          quantity: Number(item.quantity),
+          variant: item.variant || null
         })),
         shipping: {
-          cost: freight || 0,
           cep: shipping.cep,
           uf: shipping.uf,
           city: shipping.city,
@@ -253,7 +250,6 @@ async function startCheckout() {
           email,
           phone: String(formData.get("phone") || "").trim()
         },
-        external_reference: `SESH-${Date.now()}`
       })
     });
 

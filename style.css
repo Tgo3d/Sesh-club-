@@ -374,3 +374,19 @@ body.modal-open { overflow: hidden; }
   background: #111;
   color: #fff;
 }
+
+.coming-soon-price { display:block; color:#f5d20b; letter-spacing:.08em; }
+.coming-soon-action { display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:0 14px; border:1px solid #f5d20b; color:#f5d20b; border-radius:8px; font-weight:800; font-size:12px; letter-spacing:.06em; }
+.coming-soon-detail { display:inline-block; margin:8px 0 12px; padding:8px 12px; border:1px solid #f5d20b; color:#f5d20b; border-radius:7px; font-weight:900; letter-spacing:.08em; }
+.coming-soon-detail-action { padding:12px 14px; border:1px solid #f5d20b; color:#f5d20b; border-radius:8px; font-weight:800; }
+
+
+/* História da marca — versão visual 17 */
+.story-origin { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+.story-origin-content { max-width: 780px; margin: 0 auto; }
+.story-origin .kicker { margin: 0 0 .75rem; }
+.story-origin h2 { font-size: clamp(2.2rem, 4vw, 3.5rem); margin: 0 0 1.4rem; }
+.story-origin h2 em { color: var(--accent, #d8e75f); }
+.story-origin-content > p:not(.kicker):not(.story-origin-signoff) { max-width: 720px; color: #d8d8d2; line-height: 1.8; margin: 0 0 1rem; }
+.story-origin-signoff { margin: 1.7rem 0 0; font-weight: 800; letter-spacing: .08em; }
+@media (max-width: 700px) { .story-origin { padding-top: 3rem; padding-bottom: 3rem; } }

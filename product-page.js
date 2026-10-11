@@ -79,7 +79,7 @@ if (!product) {
         <p class="kicker">${escapeHtml(product.tag)}</p>
         <h1>${escapeHtml(product.name)}</h1>
         <p class="product-detail-lead">${escapeHtml(product.short)}</p>
-        <div class="price" id="product-price">${formatPrice(currentPrice())}</div>
+        ${product.status === "em-breve" ? `<div class="coming-soon-detail">EM BREVE</div>` : `<div class="price" id="product-price">${formatPrice(currentPrice())}</div>`}
         <p class="description">${escapeHtml(product.description)}</p>
 
         ${hasVariants ? `
@@ -110,7 +110,7 @@ if (!product) {
         </div>
 
         <div class="product-detail-actions">
-          <button class="button button-primary" id="add-product">Adicionar ao carrinho <b>→</b></button>
+          ${product.status === "em-breve" ? `<div class="coming-soon-detail-action">Produto em desenvolvimento — em breve na loja.</div>` : `<button class="button button-primary" id="add-product">Adicionar ao carrinho <b>→</b></button>`}
           <a class="button button-ghost" href="index.html#produtos">Voltar para a loja</a>
         </div>
         <p class="product-detail-note">Frete grátis nas compras acima de R$ 199. O valor do frete é calculado pelo CEP no checkout.</p>
@@ -155,7 +155,8 @@ if (!product) {
       selected[key] = button.dataset.value;
       document.querySelectorAll(`.option-button[data-option="${key}"]`).forEach((item) => item.classList.remove("selected"));
       button.classList.add("selected");
-      document.querySelector("#product-price").textContent = formatPrice(currentPrice());
+      const priceEl = document.querySelector("#product-price");
+      if (priceEl) priceEl.textContent = formatPrice(currentPrice());
     });
   });
 
