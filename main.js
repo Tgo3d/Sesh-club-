@@ -235,6 +235,8 @@ async function startCheckout() {
           id: String(item.base_product_id || item.id),
           title: item.variant_label ? `${item.name} — ${item.variant_label}` : item.name,
           description: `Produto Sesh Club — ${item.name}${item.variant_label ? ` | ${item.variant_label}` : ""}`,
+          variant: item.variant || null,
+          variant_label: item.variant_label || "",
           quantity: item.quantity,
           unit_price: item.price
         })),
