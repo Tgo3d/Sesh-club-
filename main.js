@@ -192,23 +192,6 @@ async function lookupCep(cep) {
   renderCart();
 }
 
-async function getCheckoutIdempotencyKey(payload) {
-  const input = new TextEncoder().encode(JSON.stringify(payload));
-  const digest = await crypto.subtle.digest("SHA-256", input);
-  const fingerprint = [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
-  const storageKey = `sesh-checkout-key:${fingerprint}`;
-  try {
-    let key = sessionStorage.getItem(storageKey);
-    if (!key) {
-      key = crypto.randomUUID();
-      sessionStorage.setItem(storageKey, key);
-    }
-    return key;
-  } catch {
-    return crypto.randomUUID();
-  }
-}
-
 async function startCheckout() {
   if (!cart.length) return;
   const formData = new FormData(customerForm);
@@ -244,32 +227,34 @@ async function startCheckout() {
   checkoutStatus.textContent = "Preparando seu pagamento com segurança…";
 
   try {
-    const checkoutPayload = {
-      items: cart.map((item) => ({
-        id: String(item.base_product_id || item.id),
-        quantity: Number(item.quantity),
-        variant: item.variant || null
-      })),
-      shipping: {
-        cep: shipping.cep,
-        uf: shipping.uf,
-        city: shipping.city,
-        street: String(formData.get("street") || "").trim(),
-        number: String(formData.get("number") || "").trim(),
-        complement: String(formData.get("complement") || "").trim(),
-        neighborhood: String(formData.get("neighborhood") || "").trim()
-      },
-      customer: {
-        name: String(formData.get("name") || "").trim(),
-        email,
-        phone: String(formData.get("phone") || "").trim()
-      }
-    };
-    checkoutPayload.idempotencyKey = await getCheckoutIdempotencyKey(checkoutPayload);
     const response = await fetch(CHECKOUT_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(checkoutPayload)
+      body: JSON.stringify({
+        items: cart.map((item) => ({
+          id: String(item.base_product_id || item.id),
+          title: item.variant_label ? `${item.name} — ${item.variant_label}` : item.name,
+          description: `Produto Sesh Club — ${item.name}${item.variant_label ? ` | ${item.variant_label}` : ""}`,
+          quantity: item.quantity,
+          unit_price: item.price
+        })),
+        shipping: {
+          cost: freight || 0,
+          cep: shipping.cep,
+          uf: shipping.uf,
+          city: shipping.city,
+          street: String(formData.get("street") || "").trim(),
+          number: String(formData.get("number") || "").trim(),
+          complement: String(formData.get("complement") || "").trim(),
+          neighborhood: String(formData.get("neighborhood") || "").trim()
+        },
+        customer: {
+          name: String(formData.get("name") || "").trim(),
+          email,
+          phone: String(formData.get("phone") || "").trim()
+        },
+        external_reference: `SESH-${Date.now()}`
+      })
     });
 
     const data = await response.json();
@@ -286,16 +271,6 @@ renderProducts();
 renderCategories();
 updateCartCount();
 renderCart();
-
-const checkoutReturnStatus = new URLSearchParams(window.location.search).get("status");
-if (checkoutReturnStatus === "success") {
-  try {
-    for (let i = sessionStorage.length - 1; i >= 0; i--) {
-      const key = sessionStorage.key(i);
-      if (key && key.startsWith("sesh-checkout-key:")) sessionStorage.removeItem(key);
-    }
-  } catch { /* sessionStorage may be disabled */ }
-}
 
 if (new URLSearchParams(window.location.search).get("cart") === "1" && cart.length) {
   openCart();
